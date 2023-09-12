@@ -1,0 +1,468 @@
+{{ header }}{{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="pull-right">
+        <button type="submit" form="form-shipping" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
+        <a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a></div>
+      <h1>{{ heading_title }}</h1>
+      <ul class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+        <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  <div class="container-fluid">
+    {% if error_user_id %}
+    <div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> {{ error_user_id }}
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-pencil"></i> {{ text_edit }}</h3>
+      </div>
+      <div class="panel-body">
+        <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-shipping" class="form-horizontal">
+          <ul class="nav nav-tabs">
+            <li class="active"><a href="#tab-general" data-toggle="tab">{{ tab_general }}</a></li>
+            <li><a href="#tab-hinnasto" data-toggle="tab">{{ tab_hinnasto }}</a></li>
+            <li><a href="#tab-hinnasto-2" data-toggle="tab">{{ tab_hinnasto_2 }}</a></li>
+            <li><a href="#tab-hinnasto-3" data-toggle="tab">{{ tab_hinnasto_3 }}</a></li>
+            <li><a href="#tab-hinnasto-4" data-toggle="tab">{{ tab_hinnasto_4 }}</a></li>
+          </ul>
+        <div class="tab-content">
+        <div class="tab-pane active" id="tab-general">
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-cost">{{ entry_user_id }}</label>
+            <div class="col-sm-10">
+              <input type="text" name="shipping_matkahuolto_user_id" value="{{ shipping_matkahuolto_user_id }}" placeholder="{{ entry_user_id }}" id="input-cost" class="form-control" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-tax-class">{{ entry_tax_class }}</label>
+            <div class="col-sm-10">
+              <select name="shipping_matkahuolto_tax_class_id" id="input-tax-class" class="form-control">
+                <option value="0">{{ text_none }}</option>
+                {% for tax_class in tax_classes %}
+                {% if tax_class.tax_class_id == shipping_matkahuolto_tax_class_id %}
+                <option value="{{ tax_class.tax_class_id }}" selected="selected">{{ tax_class.title }}</option>
+                {% else %}
+                <option value="{{ tax_class.tax_class_id }}">{{ tax_class.title }}</option>
+                {% endif %}
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-weight-class">{{ entry_weight_class }}</label>
+            <div class="col-sm-10">
+              <select name="shipping_matkahuolto_weight_class_id" id="input-weight-class" class="form-control">
+                <option value="0">{{ text_none }}</option>
+                {% for weight_class in weight_classes %}
+                {% if weight_class.weight_class_id == shipping_matkahuolto_weight_class_id %}
+                <option value="{{ weight_class.weight_class_id }}" selected="selected">{{ weight_class.title }}</option>
+                {% else %}
+                <option value="{{ weight_class.weight_class_id }}">{{ weight_class.title }}</option>
+                {% endif %}
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-weight-class">{{ entry_length_class }}</label>
+            <div class="col-sm-10">
+              <select name="shipping_matkahuolto_length_class_id" id="input-weight-class" class="form-control">
+                <option value="0">{{ text_none }}</option>
+                {% for length_class in length_classes %}
+                {% if length_class.length_class_id == shipping_matkahuolto_length_class_id %}
+                <option value="{{ length_class.length_class_id }}" selected="selected">{{ length_class.title }}</option>
+                {% else %}
+                <option value="{{ length_class.length_class_id }}">{{ length_class.title }}</option>
+                {% endif %}
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-geo-zone">{{ entry_geo_zone }}</label>
+            <div class="col-sm-10">
+              <select name="shipping_matkahuolto_geo_zone_id" id="input-geo-zone" class="form-control">
+                <option value="0">{{ text_all_zones }}</option>
+                {% for geo_zone in geo_zones %}
+                {% if geo_zone.geo_zone_id == shipping_matkahuolto_geo_zone_id %}
+                <option value="{{ geo_zone.geo_zone_id }}" selected="selected">{{ geo_zone.name }}</option>
+                {% else %}
+                <option value="{{ geo_zone.geo_zone_id }}">{{ geo_zone.name }}</option>
+                {% endif %}
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-status">{{ entry_status }}</label>
+            <div class="col-sm-10">
+              <select name="shipping_matkahuolto_status" id="input-status" class="form-control">
+                {% if shipping_matkahuolto_status %}
+                <option value="1" selected="selected">{{ text_enabled }}</option>
+                <option value="0">{{ text_disabled }}</option>
+                {% else %}
+                <option value="1">{{ text_enabled }}</option>
+                <option value="0" selected="selected">{{ text_disabled }}</option>
+                {% endif %}
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-status">{{ entry_test_mode }}</label>
+            <div class="col-sm-10">
+              <select name="shipping_matkahuolto_test_mode" id="input-status" class="form-control">
+                {% if shipping_matkahuolto_test_mode %}
+                <option value="1" selected="selected">{{ text_enabled }}</option>
+                <option value="0">{{ text_disabled }}</option>
+                {% else %}
+                <option value="1">{{ text_enabled }}</option>
+                <option value="0" selected="selected">{{ text_disabled }}</option>
+                {% endif %}
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-free-cargo">{{ entry_free_cargo }}</label>
+            <div class="col-sm-10">
+              <select name="shipping_matkahuolto_free_cargo" id="input-free-cargo" class="form-control">
+                {% if shipping_matkahuolto_free_cargo %}
+                <option value="1" selected="selected">{{ text_enabled }}</option>
+                <option value="0">{{ text_disabled }}</option>
+                {% else %}
+                <option value="1">{{ text_enabled }}</option>
+                <option value="0" selected="selected">{{ text_disabled }}</option>
+                {% endif %}
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-discount-cargo">{{ entry_discount_cargo }}</label>
+            <div class="col-sm-10">
+              <select name="shipping_matkahuolto_discount_cargo" id="input-discount-cargo" class="form-control">
+                {% if shipping_matkahuolto_discount_cargo %}
+                <option value="1" selected="selected">{{ text_enabled }}</option>
+                <option value="0">{{ text_disabled }}</option>
+                {% else %}
+                <option value="1">{{ text_enabled }}</option>
+                <option value="0" selected="selected">{{ text_disabled }}</option>
+                {% endif %}
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-cargo-sum">{{ entry_cargo_sum }}</label>
+            <div class="col-sm-10">
+              <input type="text" name="shipping_matkahuolto_cargo_sum" value="{{ shipping_matkahuolto_cargo_sum }}" placeholder="{{ entry_cargo_sum }}" id="input-cargo-sum" class="form-control" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-discount-cargo-percent">{{ entry_discount_cargo_percent }}</label>
+            <div class="col-sm-10">
+              <input type="text" name="shipping_matkahuolto_discount_cargo_percent" value="{{ shipping_matkahuolto_discount_cargo_percent }}" placeholder="{{ entry_discount_cargo_percent }}" id="input-discount-cargo-percent" class="form-control" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-search">{{ entry_search }}</label>
+            <div class="col-sm-10">
+              <input type="text" name="shipping_matkahuolto_search_result" value="{{ shipping_matkahuolto_search_result }}" placeholder="{{ entry_search }}" id="input-search" class="form-control" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-kotijakelu">{{ entry_kotijakelu }}</label>
+            <div class="col-sm-10">
+              <select name="shipping_matkahuolto_kotijakelu" id="input-kotijakelu" class="form-control">
+                {% if shipping_matkahuolto_kotijakelu %}
+                <option value="1" selected="selected">{{ text_enabled }}</option>
+                <option value="0">{{ text_disabled }}</option>
+                {% else %}
+                <option value="1">{{ text_enabled }}</option>
+                <option value="0" selected="selected">{{ text_disabled }}</option>
+                {% endif %}
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-koti-price"><span data-toggle="tooltip" title="{{ help_kotijakelu_price }}">{{ entry_kotijakelu_price }}</span></label>
+            <div class="col-sm-10">
+              <input type="text" name="shipping_matkahuolto_kotijakelu_price" value="{{ shipping_matkahuolto_kotijakelu_price }}" placeholder="{{ entry_kotijakelu_price }}" id="input-koti-price" class="form-control" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-iso-palvelu"><span data-toggle="tooltip" title="{{ help_iso_palvelu }}">{{ entry_iso_palvelu }}</span></label>
+            <div class="col-sm-10">
+              <select name="shipping_matkahuolto_iso_palvelu" id="input-iso-palvelu" class="form-control">
+                {% if shipping_matkahuolto_iso_palvelu %}
+                <option value="1" selected="selected">{{ text_enabled }}</option>
+                <option value="0">{{ text_disabled }}</option>
+                {% else %}
+                <option value="1">{{ text_enabled }}</option>
+                <option value="0" selected="selected">{{ text_disabled }}</option>
+                {% endif %}
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-iso-price"><span data-toggle="tooltip" title="{{ help_iso_price }}">{{ entry_iso_add_price }}</span></label>
+            <div class="col-sm-10">
+              <input type="text" name="shipping_matkahuolto_iso_price" value="{{ shipping_matkahuolto_iso_price }}" placeholder="{{ entry_iso_add_price }}" id="input-iso-price" class="form-control" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-sort-order">{{ entry_sort_order }}</label>
+            <div class="col-sm-10">
+              <input type="text" name="shipping_matkahuolto_sort_order" value="{{ shipping_matkahuolto_sort_order }}" placeholder="{{ entry_sort_order }}" id="input-sort-order" class="form-control" />
+            </div>
+          </div>
+        </div>
+
+        <div class="tab-pane" id="tab-hinnasto">
+           <b>{{ text_hinnasto_description }}</b>
+              <div class="table-responsive">
+                <table id="ihinnasto" class="table table-striped table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <td class="text-left col-sm-2">{{ column_kg }}</td>
+                      <td class="text-left col-sm-8">{{ column_price }}</td>
+                      <td class="text-left col-sm-2"></td>
+                    </tr>
+                  </thead>
+                  <tbody>
+          {% set row = 0 %}
+          {% if shipping_matkahuolto_hinnasto %}
+            {% for hinta in shipping_matkahuolto_hinnasto %}
+             <tr id="row{{ row }}">
+                    <td class="text-left"> <input type="text" name="shipping_matkahuolto_hinnasto[{{ row }}][kg]" value="{{ hinta.kg }}" class="form-control" /></td>
+                    <td><input type="text" name="shipping_matkahuolto_hinnasto[{{ row }}][price]" value="{{ hinta.price }}" class="form-control" /></td>
+                    <td class="text-left"><button type="button" onclick="$('#row{{ row }}').remove()" data-toggle="tooltip" title="{{ button_remove }}" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button></td></tr>      
+            {% set row = row + 1 %}
+            {% endfor %}
+          {% endif %}
+            </tbody>
+                  <tfoot>
+                    <tr>
+                      <td></td>
+                      <td></td>
+                      <td class="text-left"><button type="button" id="button-add" data-toggle="tooltip" title="{{ button_weight_add }}" class="btn btn-primary"><i class="fa fa-plus-circle"></i></button></td>
+                    </tr>
+                    </tfoot>
+                  </table>
+            </div>
+
+  <script type="text/javascript"><!--
+   var row = {{ row }};
+  $('#button-add').click(function(){
+  html  = '<tr id="row' + row + '">';
+  html += '  <td class="text-right"><input type="text" name="shipping_matkahuolto_hinnasto[' + row + '][kg]" value="" placeholder="{{ column_kg }}" class="form-control" /></td>';
+  html += '  <td class="text-right"><input type="text" name="shipping_matkahuolto_hinnasto[' + row + '][price]" value="" placeholder="{{ column_price }}" class="form-control" /></td>';
+  html += '  <td class="text-left"><button type="button" onclick="$(\'#row' + row + '\').remove();" data-toggle="tooltip" title="{{ button_remove }}" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button></td>';
+  html += '</tr>';
+
+  $('#tab-hinnasto tbody').append(html);
+
+  row++;
+  });
+//--></script>
+        </div>
+
+        <div class="tab-pane" id="tab-hinnasto-2">
+          <b>{{ text_hinnasto_2_description }}</b>
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-hinnasto">{{ entry_hinnasto_2 }}</label>
+            <div class="col-sm-10">
+              <select name="shipping_matkahuolto_hinnasto_2_status" id="input-hinnasto" class="form-control">
+                {% if shipping_matkahuolto_hinnasto_2_status %}
+                <option value="1" selected="selected">{{ text_enabled }}</option>
+                <option value="0">{{ text_disabled }}</option>
+                {% else %}
+                <option value="1">{{ text_enabled }}</option>
+                <option value="0" selected="selected">{{ text_disabled }}</option>
+                {% endif %}
+              </select>
+            </div>
+          </div>
+              <div class="table-responsive">
+                <table id="ihinnasto" class="table table-striped table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <td class="text-left col-sm-2">{{ column_kg }}</td>
+                      <td class="text-left col-sm-8">{{ column_price }}</td>
+                      <td class="text-left col-sm-2"></td>
+                    </tr>
+                  </thead>
+                  <tbody>
+          {% set row2 = 0 %}
+          {% if shipping_matkahuolto_hinnasto_2 %}
+            {% for hinta2 in shipping_matkahuolto_hinnasto_2 %}
+             <tr id="row2-{{ row2 }}">
+                    <td class="text-left"> <input type="text" name="shipping_matkahuolto_hinnasto_2[{{ row2 }}][kg]" value="{{ hinta2.kg }}" class="form-control" /></td>
+                    <td><input type="text" name="shipping_matkahuolto_hinnasto_2[{{ row2 }}][price]" value="{{ hinta2.price }}" class="form-control" /></td>
+                    <td class="text-left"><button type="button" onclick="$('#row2-{{ row2 }}').remove()" data-toggle="tooltip" title="{{ button_remove }}" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button></td></tr>      
+            {% set row2 = row2 + 1 %}
+            {% endfor %}
+          {% endif %}
+            </tbody>
+                  <tfoot>
+                    <tr>
+                      <td></td>
+                      <td></td>
+                      <td class="text-left"><button type="button" id="button-add-2" data-toggle="tooltip" title="{{ button_weight_add }}" class="btn btn-primary"><i class="fa fa-plus-circle"></i></button></td>
+                    </tr>
+                    </tfoot>
+                  </table>
+            </div>
+
+  <script type="text/javascript"><!--
+   var row2 = {{ row2 }};
+  $('#button-add-2').click(function(){
+  html2  = '<tr id="row2-' + row2 + '">';
+  html2 += '  <td class="text-right"><input type="text" name="shipping_matkahuolto_hinnasto_2[' + row2 + '][kg]" value="" placeholder="{{ column_kg }}" class="form-control" /></td>';
+  html2 += '  <td class="text-right"><input type="text" name="shipping_matkahuolto_hinnasto_2[' + row2 + '][price]" value="" placeholder="{{ column_price }}" class="form-control" /></td>';
+  html2 += '  <td class="text-left"><button type="button" onclick="$(\'#row2-' + row2 + '\').remove();" data-toggle="tooltip" title="{{ button_remove }}" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button></td>';
+  html2 += '</tr>';
+
+  $('#tab-hinnasto-2 tbody').append(html2);
+
+  row2++;
+  });
+//--></script>
+        </div>
+
+        <div class="tab-pane" id="tab-hinnasto-3">
+        <b>{{ text_hinnasto_3_description }}</b>
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-hinnasto-3">{{ entry_hinnasto_3 }}</label>
+            <div class="col-sm-10">
+              <select name="shipping_matkahuolto_hinnasto_3_status" id="input-hinnasto-3" class="form-control">
+                {% if shipping_matkahuolto_hinnasto_3_status %}
+                <option value="1" selected="selected">{{ text_enabled }}</option>
+                <option value="0">{{ text_disabled }}</option>
+                {% else %}
+                <option value="1">{{ text_enabled }}</option>
+                <option value="0" selected="selected">{{ text_disabled }}</option>
+                {% endif %}
+              </select>
+            </div>
+          </div>
+              <div class="table-responsive">
+                <table id="ihinnasto" class="table table-striped table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <td class="text-left col-sm-2">{{ column_kg }}</td>
+                      <td class="text-left col-sm-8">{{ column_price }}</td>
+                      <td class="text-left col-sm-2"></td>
+                    </tr>
+                  </thead>
+                  <tbody>
+          {% set row3 = 0 %}
+          {% if shipping_matkahuolto_hinnasto_3 %}
+            {% for hinta3 in shipping_matkahuolto_hinnasto_3 %}
+             <tr id="row3-{{ row3 }}">
+                    <td class="text-left"> <input type="text" name="shipping_matkahuolto_hinnasto_3[{{ row3 }}][kg]" value="{{ hinta3.kg }}" class="form-control" /></td>
+                    <td><input type="text" name="shipping_matkahuolto_hinnasto_3[{{ row3 }}][price]" value="{{ hinta3.price }}" class="form-control" /></td>
+                    <td class="text-left"><button type="button" onclick="$('#row3-{{ row3 }}').remove()" data-toggle="tooltip" title="{{ button_remove }}" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button></td></tr>      
+            {% set row3 = row3 + 1 %}
+            {% endfor %}
+          {% endif %}
+            </tbody>
+                  <tfoot>
+                    <tr>
+                      <td></td>
+                      <td></td>
+                      <td class="text-left"><button type="button" id="button-add-3" data-toggle="tooltip" title="{{ button_weight_add }}" class="btn btn-primary"><i class="fa fa-plus-circle"></i></button></td>
+                    </tr>
+                    </tfoot>
+                  </table>
+            </div>
+
+  <script type="text/javascript"><!--
+   var row3 = {{ row3 }};
+  $('#button-add-3').click(function(){
+  html3  = '<tr id="row3-' + row3 + '">';
+  html3 += '  <td class="text-right"><input type="text" name="shipping_matkahuolto_hinnasto_3[' + row3 + '][kg]" value="" placeholder="{{ column_kg }}" class="form-control" /></td>';
+  html3 += '  <td class="text-right"><input type="text" name="shipping_matkahuolto_hinnasto_3[' + row3 + '][price]" value="" placeholder="{{ column_price }}" class="form-control" /></td>';
+  html3 += '  <td class="text-left"><button type="button" onclick="$(\'#row3-' + row3 + '\').remove();" data-toggle="tooltip" title="{{ button_remove }}" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button></td>';
+  html3 += '</tr>';
+
+  $('#tab-hinnasto-3 tbody').append(html3);
+
+  row3++;
+  });
+//--></script>
+        </div>
+
+        <div class="tab-pane" id="tab-hinnasto-4">
+        <b>{{ text_hinnasto_4_description }}</b>
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-hinnasto-4">{{ entry_hinnasto_4 }}</label>
+            <div class="col-sm-10">
+              <select name="shipping_matkahuolto_hinnasto_4_status" id="input-hinnasto-4" class="form-control">
+                {% if shipping_matkahuolto_hinnasto_4_status %}
+                <option value="1" selected="selected">{{ text_enabled }}</option>
+                <option value="0">{{ text_disabled }}</option>
+                {% else %}
+                <option value="1">{{ text_enabled }}</option>
+                <option value="0" selected="selected">{{ text_disabled }}</option>
+                {% endif %}
+              </select>
+            </div>
+          </div>
+              <div class="table-responsive">
+                <table id="hinnasto" class="table table-striped table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <td class="text-left col-sm-2">{{ column_kg }}</td>
+                      <td class="text-left col-sm-8">{{ column_price }}</td>
+                      <td class="text-left col-sm-2"></td>
+                    </tr>
+                  </thead>
+                  <tbody>
+          {% set row4 = 0 %}
+          {% if shipping_matkahuolto_hinnasto_4 %}
+            {% for hinta4 in shipping_matkahuolto_hinnasto_4 %}
+             <tr id="row4-{{ row4 }}">
+                    <td class="text-left"><input type="text" name="shipping_matkahuolto_hinnasto_4[{{ row4 }}][kg]" value="{{ hinta4.kg }}" class="form-control" /></td>
+                    <td><input type="text" name="shipping_matkahuolto_hinnasto_4[{{ row4 }}][price]" value="{{ hinta4.price }}" class="form-control" /></td>
+                    <td class="text-left"><button type="button" onclick="$('#row4-{{ row4 }}').remove()" data-toggle="tooltip" title="{{ button_remove }}" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button></td></tr>      
+            {% set row4 = row4 + 1 %}
+            {% endfor %}
+          {% endif %}
+            </tbody>
+                  <tfoot>
+                    <tr>
+                      <td></td>
+                      <td></td>
+                      <td class="text-left"><button type="button" id="button-add-4" data-toggle="tooltip" title="{{ button_weight_add }}" class="btn btn-primary"><i class="fa fa-plus-circle"></i></button></td>
+                    </tr>
+                    </tfoot>
+                  </table>
+            </div>
+
+  <script type="text/javascript"><!--
+   var row4 = {{ row4 }};
+  $('#button-add-4').click(function(){
+  html4  = '<tr id="row4-' + row4 + '">';
+  html4 += '  <td class="text-right"><input type="text" name="shipping_matkahuolto_hinnasto_4[' + row4 + '][kg]" value="" placeholder="{{ column_kg }}" class="form-control" /></td>';
+  html4 += '  <td class="text-right"><input type="text" name="shipping_matkahuolto_hinnasto_4[' + row4 + '][price]" value="" placeholder="{{ column_price }}" class="form-control" /></td>';
+  html4 += '  <td class="text-left"><button type="button" onclick="$(\'#row4-' + row4 + '\').remove();" data-toggle="tooltip" title="{{ button_remove }}" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button></td>';
+  html4 += '</tr>';
+
+  $('#tab-hinnasto-4 tbody').append(html4);
+
+  row4++;
+  });
+//--></script>
+        </div>
+        </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{{ footer }} 
